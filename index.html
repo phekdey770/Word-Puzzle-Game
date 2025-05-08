@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word Puzzle Adventure</title>
+    <title>Word Puzzle Game</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/436/436370.png">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap');
+        
         :root {
             --primary: #4361ee;
             --secondary: #3f37c9;
@@ -24,6 +27,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Kantumruy Pro', 'Poppins';
         }
 
         body {
@@ -85,6 +89,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            white-space: nowrap;
         }
 
         .btn-primary {
@@ -189,11 +194,14 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .game-info {
             display: flex;
             gap: 20px;
+            flex-wrap: wrap;
         }
 
         .info-box {
@@ -246,6 +254,7 @@
             letter-spacing: 5px;
             color: var(--dark);
             margin-bottom: 10px;
+            word-break: break-all;
         }
 
         .hint-text {
@@ -262,10 +271,12 @@
         .input-group {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         .answer-input {
             flex: 1;
+            min-width: 200px;
             padding: 15px;
             border: 2px solid var(--gray);
             border-radius: 10px;
@@ -282,6 +293,7 @@
         .action-buttons {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         .btn-success {
@@ -357,6 +369,31 @@
         }
 
         .help-content {
+            line-height: 1.6;
+        }
+
+        /* Game Info Section */
+        .game-info-section {
+            margin-top: 30px;
+            background-color: var(--light);
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .game-info-section.active {
+            display: block;
+        }
+
+        .game-info-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .game-info-content {
             line-height: 1.6;
         }
 
@@ -463,6 +500,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .leaderboard-title {
@@ -473,12 +512,15 @@
         .leaderboard-table {
             width: 100%;
             border-collapse: collapse;
+            overflow-x: auto;
+            display: block;
         }
 
         .leaderboard-table th, .leaderboard-table td {
             padding: 12px 15px;
             text-align: left;
             border-bottom: 1px solid var(--light);
+            white-space: nowrap;
         }
 
         .leaderboard-table th {
@@ -513,24 +555,22 @@
             font-weight: 600;
         }
 
+        /* Khmer Font */
+        .khmer-font {
+            font-family: 'Kantumruy Pro', 'Poppins';
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
-            .game-header, .header-content {
+            .header-content {
                 flex-direction: column;
                 gap: 15px;
             }
 
-            .game-info {
+            .nav-buttons {
                 width: 100%;
-                justify-content: space-between;
-            }
-
-            .input-group {
-                flex-direction: column;
-            }
-
-            .action-buttons {
                 justify-content: center;
+                flex-wrap: wrap;
             }
 
             .intro-title {
@@ -539,6 +579,74 @@
 
             .scrambled-word {
                 font-size: 1.8rem;
+                letter-spacing: 3px;
+            }
+
+            .game-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .game-info {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .info-box {
+                flex: 1;
+                min-width: 120px;
+                justify-content: center;
+            }
+
+            .leaderboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .leaderboard-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .intro-title {
+                font-size: 1.8rem;
+            }
+
+            .intro-description {
+                font-size: 1rem;
+            }
+
+            .start-btn {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+
+            .game-container {
+                padding: 20px;
+            }
+
+            .word-display {
+                padding: 20px;
+            }
+
+            .scrambled-word {
+                font-size: 1.5rem;
+            }
+
+            .answer-input {
+                font-size: 1rem;
+                padding: 12px;
+            }
+
+            .btn {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+
+            .modal-content {
+                padding: 20px;
             }
         }
     </style>
@@ -547,18 +655,22 @@
     <header>
         <div class="container header-content">
             <div class="logo">
-                <i class="fas fa-scroll"></i>
-                <span>Word Puzzle Adventure</span>
+                <!-- <i class="fas fa-scroll"></i> -->
+                 <img src="https://cdn-icons-png.flaticon.com/512/436/436370.png" alt="Logo" width="40px">
+                <span id="logoText">Word Puzzle Game</span>
             </div>
             <div class="nav-buttons">
                 <button class="btn btn-outline" id="helpBtn">
-                    <i class="fas fa-question-circle"></i> Help
+                    <i class="fas fa-question-circle"></i> <span id="helpBtnText">Help</span>
                 </button>
                 <button class="btn btn-outline" id="leaderboardBtn">
-                    <i class="fas fa-trophy"></i> Leaderboard
+                    <i class="fas fa-trophy"></i> <span id="leaderboardBtnText">Leaderboard</span>
+                </button>
+                <button class="btn btn-outline" id="gameInfoBtn">
+                    <i class="fas fa-info-circle"></i> <span id="gameInfoBtnText">Game Info</span>
                 </button>
                 <button class="btn btn-primary" id="settingsBtn">
-                    <i class="fas fa-cog"></i> Settings
+                    <i class="fas fa-cog"></i> <span id="settingsBtnText">Settings</span>
                 </button>
             </div>
         </div>
@@ -567,14 +679,14 @@
     <div class="container">
         <!-- Intro Screen -->
         <div class="intro-screen" id="introScreen">
-            <h1 class="intro-title">Word Puzzle Adventure</h1>
-            <p class="intro-description">
+            <h1 class="intro-title" id="introTitle">Word Puzzle Game</h1>
+            <p class="intro-description" id="introDescription">
                 Unscramble letters to form meaningful words! Test your vocabulary skills 
                 and climb the leaderboard as you progress through increasingly 
                 challenging levels. Earn badges and compete with friends!
             </p>
             <button class="start-btn" id="startBtn">
-                Start Game <i class="fas fa-play"></i>
+                <span id="startBtnText">Start Game</span> <i class="fas fa-play"></i>
             </button>
         </div>
 
@@ -584,7 +696,7 @@
                 <div class="game-info">
                     <div class="info-box">
                         <i class="fas fa-star"></i>
-                        <span id="scoreDisplay">0</span> Points
+                        <span id="scoreDisplay">0</span> <span id="pointsText">Points</span>
                     </div>
                     <div class="info-box">
                         <i class="fas fa-clock"></i>
@@ -592,33 +704,33 @@
                     </div>
                     <div class="info-box">
                         <i class="fas fa-fire"></i>
-                        Streak: <span id="streakDisplay">0</span>
+                        <span id="streakLabel">Streak:</span> <span id="streakDisplay">0</span>
                     </div>
                 </div>
-                <div class="level-badge easy" id="levelBadge">Easy</div>
+                <div class="level-badge easy" id="levelBadge"><span id="levelBadgeText">Easy</span></div>
             </div>
 
             <div class="word-display">
                 <div class="scrambled-word" id="scrambledWord">LOADING...</div>
-                <div class="hint-text" id="hintText">Hint: </div>
+                <div class="hint-text" id="hintText"><span id="hintLabel">Hint:</span> </div>
             </div>
 
             <div class="game-input">
                 <div class="input-group">
                     <input type="text" class="answer-input" id="answerInput" placeholder="Type your answer here...">
                     <button class="btn btn-success" id="submitBtn">
-                        <i class="fas fa-check"></i> Submit
+                        <i class="fas fa-check"></i> <span id="submitBtnText">Submit</span>
                     </button>
                 </div>
                 <div class="action-buttons">
                     <button class="btn btn-warning" id="hintBtn">
-                        <i class="fas fa-lightbulb"></i> Hint (7 left)
+                        <i class="fas fa-lightbulb"></i> <span id="hintBtnText">Hint (7 left)</span>
                     </button>
                     <button class="btn btn-danger" id="skipBtn">
-                        <i class="fas fa-forward"></i> Skip
+                        <i class="fas fa-forward"></i> <span id="skipBtnText">Skip</span>
                     </button>
                     <button class="btn btn-accent" id="shuffleBtn">
-                        <i class="fas fa-random"></i> Shuffle
+                        <i class="fas fa-random"></i> <span id="shuffleBtnText">Shuffle</span>
                     </button>
                 </div>
             </div>
@@ -626,23 +738,33 @@
             <div class="feedback" id="feedback"></div>
 
             <div class="help-section" id="helpSection">
-                <h3 class="help-title"><i class="fas fa-info-circle"></i> How to Play</h3>
-                <div class="help-content">
-                    <p><strong>Objective:</strong> Unscramble the letters to form a valid word.</p>
-                    <p><strong>Gameplay:</strong></p>
-                    <ul>
-                        <li>Type your answer in the input field and click Submit</li>
-                        <li>Use the Shuffle button to rearrange the letters</li>
-                        <li>Get hints when you're stuck (limited uses)</li>
-                        <li>Skip a word if it's too challenging</li>
+                <h3 class="help-title"><i class="fas fa-info-circle"></i> <span id="helpTitle">How to Play</span></h3>
+                <div class="help-content" id="helpContent">
+                    <p><strong id="objectiveText">Objective:</strong> <span id="objectiveDesc">Unscramble the letters to form a valid word.</span></p>
+                    <p><strong id="gameplayText">Gameplay:</strong></p>
+                    <ul id="gameplayList">
+                        <li id="gameplay1">Type your answer in the input field and click Submit</li>
+                        <li id="gameplay2">Use the Shuffle button to rearrange the letters</li>
+                        <li id="gameplay3">Get hints when you're stuck (limited uses)</li>
+                        <li id="gameplay4">Skip a word if it's too challenging</li>
                     </ul>
-                    <p><strong>Scoring:</strong></p>
-                    <ul>
-                        <li>+10 points for correct answer</li>
-                        <li>+5 bonus points for quick answers</li>
-                        <li>Multiplier for consecutive correct answers</li>
+                    <p><strong id="scoringText">Scoring:</strong></p>
+                    <ul id="scoringList">
+                        <li id="scoring1">+10 points for correct answer</li>
+                        <li id="scoring2">+5 bonus points for quick answers</li>
+                        <li id="scoring3">Multiplier for consecutive correct answers</li>
                     </ul>
-                    <p>Progress through levels (Easy, Medium, Hard, Expert) as you earn more points!</p>
+                    <p id="progressText">Progress through levels (Easy, Medium, Hard, Expert) as you earn more points!</p>
+                </div>
+            </div>
+
+            <div class="game-info-section" id="gameInfoSection">
+                <h3 class="game-info-title"><i class="fas fa-info-circle"></i> <span id="gameInfoTitle">Game Information</span></h3>
+                <div class="game-info-content" id="gameInfoContent">
+                    <p><strong id="creatorText">Creator:</strong> Mr. Phekdey PHORN</p>
+                    <p><strong id="versionText">Version:</strong> 1.0.0</p>
+                    <p><strong id="releaseText">Release Date:</strong> 08-May-2025</p>
+                    <p><strong id="descriptionText">Description:</strong> This word puzzle game is designed to challenge your vocabulary skills with words ranging from easy to expert levels. Enjoy the game!</p>
                 </div>
             </div>
         </div>
@@ -650,19 +772,19 @@
         <!-- Leaderboard -->
         <div class="leaderboard" id="leaderboard">
             <div class="leaderboard-header">
-                <h2 class="leaderboard-title"><i class="fas fa-trophy"></i> Leaderboard</h2>
+                <h2 class="leaderboard-title"><i class="fas fa-trophy"></i> <span id="leaderboardTitle">Leaderboard</span></h2>
                 <button class="btn btn-primary" id="backToGameBtn">
-                    <i class="fas fa-arrow-left"></i> Back to Game
+                    <i class="fas fa-arrow-left"></i> <span id="backToGameText">Back to Game</span>
                 </button>
             </div>
             <table class="leaderboard-table">
                 <thead>
                     <tr>
-                        <th>Rank</th>
-                        <th>Player</th>
-                        <th>Score</th>
-                        <th>Level</th>
-                        <th>Time Played</th>
+                        <th id="rankHeader">Rank</th>
+                        <th id="playerHeader">Player</th>
+                        <th id="scoreHeader">Score</th>
+                        <th id="levelHeader">Level</th>
+                        <th id="timeHeader">Time Played</th>
                     </tr>
                 </thead>
                 <tbody id="leaderboardBody">
@@ -676,11 +798,18 @@
     <div class="modal" id="settingsModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title"><i class="fas fa-cog"></i> Game Settings</h3>
+                <h3 class="modal-title"><i class="fas fa-cog"></i> <span id="settingsTitle">Game Settings</span></h3>
                 <button class="close-btn" id="closeSettingsBtn">&times;</button>
             </div>
             <div class="settings-option">
-                <label class="settings-label">Difficulty Level</label>
+                <label class="settings-label" id="languageLabel">Language</label>
+                <select class="settings-select" id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="km">ភាសាខ្មែរ (Khmer)</option>
+                </select>
+            </div>
+            <div class="settings-option">
+                <label class="settings-label" id="difficultyLabel">Difficulty Level</label>
                 <select class="settings-select" id="difficultySelect">
                     <option value="easy">Easy (4-5 letters)</option>
                     <option value="medium">Medium (6-7 letters)</option>
@@ -689,11 +818,11 @@
                 </select>
             </div>
             <div class="settings-option">
-                <label class="settings-label">Player Name</label>
+                <label class="settings-label" id="playerNameLabel">Player Name</label>
                 <input type="text" class="settings-input" id="playerNameInput" placeholder="Enter your name">
             </div>
             <div class="settings-option">
-                <label class="settings-label">Timer</label>
+                <label class="settings-label" id="timerLabel">Timer</label>
                 <select class="settings-select" id="timerSelect">
                     <option value="30">30 seconds per word</option>
                     <option value="45">45 seconds per word</option>
@@ -702,14 +831,14 @@
                 </select>
             </div>
             <div class="settings-actions">
-                <button class="btn btn-outline" id="cancelSettingsBtn">Cancel</button>
-                <button class="btn btn-primary" id="saveSettingsBtn">Save</button>
+                <button class="btn btn-outline" id="cancelSettingsBtn"><span id="cancelText">Cancel</span></button>
+                <button class="btn btn-primary" id="saveSettingsBtn"><span id="saveText">Save</span></button>
             </div>
         </div>
     </div>
 
     <script>
-        // Game Data
+        // Game Data with 100 words for each level
         const wordsByDifficulty = {
             easy: [
                 { word: "apple", hint: "A common fruit, often red or green" },
@@ -721,7 +850,103 @@
                 { word: "house", hint: "Place where people live" },
                 { word: "earth", hint: "Our planet" },
                 { word: "smile", hint: "Facial expression showing happiness" },
-                { word: "cloud", hint: "White or gray mass in the sky" }
+                { word: "cloud", hint: "White or gray mass in the sky" },
+                { word: "beach", hint: "Sandy shore by the ocean" },
+                { word: "chair", hint: "Furniture for sitting" },
+                { word: "dance", hint: "Move rhythmically to music" },
+                { word: "eagle", hint: "Large bird of prey" },
+                { word: "fruit", hint: "Edible plant product" },
+                { word: "grape", hint: "Small sweet fruit that grows in clusters" },
+                { word: "heart", hint: "Organ that pumps blood" },
+                { word: "igloo", hint: "Dome-shaped Eskimo house" },
+                { word: "juice", hint: "Liquid from fruits or vegetables" },
+                { word: "koala", hint: "Australian tree-dwelling marsupial" },
+                { word: "lemon", hint: "Yellow citrus fruit" },
+                { word: "mango", hint: "Sweet tropical fruit" },
+                { word: "night", hint: "Time between sunset and sunrise" },
+                { word: "ocean", hint: "Vast body of salt water" },
+                { word: "piano", hint: "Keyboard musical instrument" },
+                { word: "queen", hint: "Female monarch" },
+                { word: "river", hint: "Large natural stream of water" },
+                { word: "sunny", hint: "Weather with clear skies" },
+                { word: "tiger", hint: "Large striped cat" },
+                { word: "umbra", hint: "Shadow cast by an eclipse" },
+                { word: "vivid", hint: "Bright and intense in color" },
+                { word: "water", hint: "Transparent, odorless liquid" },
+                { word: "xenon", hint: "Chemical element with symbol Xe" },
+                { word: "yacht", hint: "Medium-sized sailboat" },
+                { word: "zebra", hint: "African wild horse with stripes" },
+                { word: "angel", hint: "Spiritual being attendant upon God" },
+                { word: "bread", hint: "Baked food made of flour" },
+                { word: "candy", hint: "Sweet food made with sugar" },
+                { word: "daisy", hint: "Small white-petaled flower" },
+                { word: "eager", hint: "Strong desire to do something" },
+                { word: "fairy", hint: "Small imaginary being with magic powers" },
+                { word: "giant", hint: "Very large person or thing" },
+                { word: "honey", hint: "Sweet sticky substance made by bees" },
+                { word: "ivory", hint: "Hard white material from elephant tusks" },
+                { word: "jolly", hint: "Happy and cheerful" },
+                { word: "karma", hint: "Hindu concept of destiny" },
+                { word: "lucky", hint: "Having good fortune" },
+                { word: "magic", hint: "Power of apparently influencing events" },
+                { word: "noble", hint: "Belonging to aristocracy" },
+                { word: "olive", hint: "Small oval fruit with hard pit" },
+                { word: "pearl", hint: "Smooth lustrous gem formed in mollusk" },
+                { word: "quiet", hint: "Making little or no noise" },
+                { word: "royal", hint: "Relating to a king or queen" },
+                { word: "sweet", hint: "Having the pleasant taste of sugar" },
+                { word: "tulip", hint: "Cup-shaped spring flower" },
+                { word: "unity", hint: "State of being united" },
+                { word: "vocal", hint: "Relating to the voice" },
+                { word: "wheat", hint: "Cereal plant used for flour" },
+                { word: "xerox", hint: "Copy of a document" },
+                { word: "yummy", hint: "Very tasty or delicious" },
+                { word: "zippy", hint: "Bright, fresh, or lively" },
+                { word: "amber", hint: "Hard translucent fossilized resin" },
+                { word: "bliss", hint: "Perfect happiness" },
+                { word: "crisp", hint: "Firm, dry, and brittle" },
+                { word: "dandy", hint: "Man excessively concerned with appearance" },
+                { word: "elate", hint: "Make someone ecstatically happy" },
+                { word: "flair", hint: "Stylish and original way of doing things" },
+                { word: "glory", hint: "High renown or honor won by achievements" },
+                { word: "haste", hint: "Excessive speed or urgency" },
+                { word: "ideal", hint: "Satisfying one's conception of perfection" },
+                { word: "jewel", hint: "Precious stone" },
+                { word: "kudos", hint: "Praise and honor for achievement" },
+                { word: "lunar", hint: "Relating to the moon" },
+                { word: "mirth", hint: "Amusement, especially as expressed in laughter" },
+                { word: "nifty", hint: "Particularly good or effective" },
+                { word: "opium", hint: "Addictive drug from poppy plant" },
+                { word: "plush", hint: "Richly luxurious and expensive" },
+                { word: "quilt", hint: "Warm bed covering" },
+                { word: "radar", hint: "System for detecting objects" },
+                { word: "savvy", hint: "Shrewdness and practical knowledge" },
+                { word: "tango", hint: "Ballroom dance from Argentina" },
+                { word: "ultra", hint: "Going beyond usual limits" },
+                { word: "venom", hint: "Poisonous secretion of animals" },
+                { word: "wharf", hint: "Structure on shore for loading ships" },
+                { word: "xylem", hint: "Vascular tissue in plants" },
+                { word: "yearn", hint: "Have intense longing for something" },
+                { word: "zesty", hint: "Having strong pleasant flavor" },
+                { word: "acorn", hint: "Fruit of the oak tree" },
+                { word: "bloom", hint: "Flower or state of flowering" },
+                { word: "covey", hint: "Small flock of birds" },
+                { word: "delve", hint: "Reach inside a receptacle to search" },
+                { word: "ember", hint: "Small piece of burning coal" },
+                { word: "froth", hint: "Mass of small bubbles in liquid" },
+                { word: "gauze", hint: "Thin transparent fabric" },
+                { word: "hovel", hint: "Small squalid house" },
+                { word: "inert", hint: "Lacking ability to move" },
+                { word: "joust", hint: "Medieval combat on horseback" },
+                { word: "kneel", hint: "Be in position on one's knees" },
+                { word: "lurch", hint: "Sudden unsteady movement" },
+                { word: "moldy", hint: "Covered with fungal growth" },
+                { word: "nudge", hint: "Prod gently with elbow" },
+                { word: "otter", hint: "Aquatic fish-eating mammal" },
+                { word: "prank", hint: "Practical joke" },
+                { word: "quail", hint: "Small short-tailed game bird" },
+                { word: "robin", hint: "Small songbird with red breast" },
+                { word: "squat", hint: "Crouch or sit with knees bent" }
             ],
             medium: [
                 { word: "banana", hint: "Long curved yellow fruit" },
@@ -733,7 +958,107 @@
                 { word: "harmony", hint: "Pleasing combination of musical notes" },
                 { word: "victory", hint: "Achievement of mastery or success" },
                 { word: "library", hint: "Place containing collections of books" },
-                { word: "breathe", hint: "Process of inhaling and exhaling" }
+                { word: "breathe", hint: "Process of inhaling and exhaling" },
+                { word: "captain", hint: "Person in command of a ship" },
+                { word: "diamond", hint: "Brilliant precious stone" },
+                { word: "elephant", hint: "Large mammal with trunk and tusks" },
+                { word: "freedom", hint: "Power to act or speak freely" },
+                { word: "giraffe", hint: "Tall African animal with long neck" },
+                { word: "holiday", hint: "Day of festivity or recreation" },
+                { word: "justice", hint: "Quality of being fair and reasonable" },
+                { word: "kangaroo", hint: "Australian marsupial with strong hind legs" },
+                { word: "laughter", hint: "Sound of laughing" },
+                { word: "mountain", hint: "Large natural elevation of the earth" },
+                { word: "notebook", hint: "Book of blank pages for writing" },
+                { word: "octopus", hint: "Sea creature with eight arms" },
+                { word: "paradise", hint: "Place of perfect happiness" },
+                { word: "quality", hint: "Standard of something as measured" },
+                { word: "rainbow", hint: "Arc of colors in the sky" },
+                { word: "sunshine", hint: "Direct sunlight unbroken by cloud" },
+                { word: "treasure", hint: "Quantity of precious metals or gems" },
+                { word: "umbrella", hint: "Device for protection against rain" },
+                { word: "vacation", hint: "Extended period of recreation" },
+                { word: "wonderful", hint: "Extremely good or remarkable" },
+                { word: "xylophone", hint: "Musical instrument with wooden bars" },
+                { word: "yesterday", hint: "Day before today" },
+                { word: "zeppelin", hint: "Large German airship" },
+                { word: "absolute", hint: "Not qualified or diminished" },
+                { word: "brilliant", hint: "Exceptionally clever or talented" },
+                { word: "creative", hint: "Relating to imagination or original ideas" },
+                { word: "delicate", hint: "Very fine in texture or structure" },
+                { word: "energetic", hint: "Showing or involving activity" },
+                { word: "favorite", hint: "Preferred before all others" },
+                { word: "graceful", hint: "Having elegance or beauty" },
+                { word: "hospital", hint: "Institution providing medical treatment" },
+                { word: "infinite", hint: "Limitless or endless in space" },
+                { word: "jubilant", hint: "Feeling or expressing great happiness" },
+                { word: "knowledge", hint: "Facts, information, and skills" },
+                { word: "luminous", hint: "Full of or shedding light" },
+                { word: "magnificent", hint: "Extremely beautiful and impressive" },
+                { word: "navigate", hint: "Plan and direct the route" },
+                { word: "obedient", hint: "Complying with orders or requests" },
+                { word: "peaceful", hint: "Free from disturbance" },
+                { word: "question", hint: "Sentence worded to elicit information" },
+                { word: "reliable", hint: "Consistently good in quality" },
+                { word: "sapphire", hint: "Transparent precious stone" },
+                { word: "terrific", hint: "Extremely good or excellent" },
+                { word: "ultimate", hint: "Being the best or most extreme" },
+                { word: "valuable", hint: "Worth a great deal of money" },
+                { word: "wholesome", hint: "Conducive to moral well-being" },
+                { word: "youthful", hint: "Remaining young and energetic" },
+                { word: "zucchini", hint: "Variety of summer squash" },
+                { word: "ambition", hint: "Strong desire to achieve something" },
+                { word: "boundary", hint: "Line marking the limits of an area" },
+                { word: "cucumber", hint: "Long green salad vegetable" },
+                { word: "diligent", hint: "Having care in one's work" },
+                { word: "enormous", hint: "Very large in size or quantity" },
+                { word: "fabulous", hint: "Extraordinary, especially extraordinarily large" },
+                { word: "generous", hint: "Showing readiness to give more" },
+                { word: "horizon", hint: "Line where earth and sky appear to meet" },
+                { word: "isolated", hint: "Far away from other places" },
+                { word: "jealous", hint: "Feeling resentment against someone" },
+                { word: "keyboard", hint: "Panel of keys for computer input" },
+                { word: "landscape", hint: "All visible features of an area" },
+                { word: "marathon", hint: "Long-distance running race" },
+                { word: "negative", hint: "Consisting in or characterized by absence" },
+                { word: "ordinary", hint: "With no special or distinctive features" },
+                { word: "positive", hint: "Consisting in or characterized by presence" },
+                { word: "quantity", hint: "Amount or number of something" },
+                { word: "remember", hint: "Have in or be able to bring to mind" },
+                { word: "sensible", hint: "Chosen in accordance with wisdom" },
+                { word: "triangle", hint: "Plane figure with three sides" },
+                { word: "universe", hint: "All existing matter and space" },
+                { word: "vertical", hint: "At right angles to a horizontal plane" },
+                { word: "wildlife", hint: "Native animals of a region" },
+                { word: "xenolith", hint: "Rock fragment within another rock" },
+                { word: "yearbook", hint: "Annual publication recording events" },
+                { word: "zoology", hint: "Scientific study of animals" },
+                { word: "acoustic", hint: "Relating to sound or hearing" },
+                { word: "bacteria", hint: "Microscopic single-celled organisms" },
+                { word: "calendar", hint: "System for organizing days" },
+                { word: "dinosaur", hint: "Extinct reptile of past ages" },
+                { word: "electric", hint: "Of or worked by electricity" },
+                { word: "fraction", hint: "Numerical quantity not whole" },
+                { word: "geometry", hint: "Branch of mathematics" },
+                { word: "hydrogen", hint: "Lightest chemical element" },
+                { word: "inventor", hint: "Person who invented something" },
+                { word: "jellyfish", hint: "Free-swimming marine animal" },
+                { word: "kilogram", hint: "Metric unit of mass" },
+                { word: "laboratory", hint: "Room for scientific experiments" },
+                { word: "molecule", hint: "Group of bonded atoms" },
+                { word: "nitrogen", hint: "Chemical element, symbol N" },
+                { word: "organism", hint: "Individual living system" },
+                { word: "parallel", hint: "Side by side and equidistant" },
+                { word: "quantity", hint: "Amount or number of something" },
+                { word: "reptile", hint: "Cold-blooded vertebrate animal" },
+                { word: "satellite", hint: "Artificial body orbiting earth" },
+                { word: "telescope", hint: "Optical instrument for viewing" },
+                { word: "ultraviolet", hint: "Radiation beyond violet spectrum" },
+                { word: "volcano", hint: "Mountain with crater emitting lava" },
+                { word: "wavelength", hint: "Distance between wave crests" },
+                { word: "xenophobia", hint: "Dislike of foreigners" },
+                { word: "yellowish", hint: "Having a yellow tinge" },
+                { word: "ziggurat", hint: "Ancient Mesopotamian temple tower" }
             ],
             hard: [
                 { word: "adventure", hint: "Exciting or remarkable experience" },
@@ -745,7 +1070,96 @@
                 { word: "happiness", hint: "State of being happy" },
                 { word: "important", hint: "Of great significance or value" },
                 { word: "knowledge", hint: "Facts, information, and skills acquired" },
-                { word: "mysterious", hint: "Difficult or impossible to understand" }
+                { word: "mysterious", hint: "Difficult or impossible to understand" },
+                { word: "necessary", hint: "Required to be done or achieved" },
+                { word: "operation", hint: "Fact or condition of functioning" },
+                { word: "passenger", hint: "Traveler on public or private transport" },
+                { word: "quotation", hint: "Group of words taken from text or speech" },
+                { word: "rectangle", hint: "Four-sided plane figure" },
+                { word: "scientist", hint: "Person engaged in scientific research" },
+                { word: "telephone", hint: "System for transmitting voices" },
+                { word: "umbrella", hint: "Device for protection against rain" },
+                { word: "vegetable", hint: "Plant or part of plant used as food" },
+                { word: "waterfall", hint: "Cascade of water falling from a height" },
+                { word: "xylophone", hint: "Musical instrument with wooden bars" },
+                { word: "yesterday", hint: "Day before today" },
+                { word: "zeppelin", hint: "Large German airship" },
+                { word: "ambitious", hint: "Having or showing strong desire" },
+                { word: "brilliant", hint: "Exceptionally clever or talented" },
+                { word: "confident", hint: "Feeling or showing certainty" },
+                { word: "delicious", hint: "Highly pleasant to the taste" },
+                { word: "excellent", hint: "Extremely good or outstanding" },
+                { word: "fabulous", hint: "Extraordinary, especially extraordinarily large" },
+                { word: "glorious", hint: "Having, worthy of, or bringing fame" },
+                { word: "hilarious", hint: "Extremely amusing" },
+                { word: "incredible", hint: "Impossible to believe" },
+                { word: "jubilant", hint: "Feeling or expressing great happiness" },
+                { word: "knowledge", hint: "Facts, information, and skills" },
+                { word: "luxurious", hint: "Extremely comfortable or elegant" },
+                { word: "magnificent", hint: "Extremely beautiful and impressive" },
+                { word: "notorious", hint: "Famous or well known for bad quality" },
+                { word: "outstanding", hint: "Exceptionally good" },
+                { word: "phenomenal", hint: "Remarkable or exceptional" },
+                { word: "qualified", hint: "Officially recognized as trained" },
+                { word: "remarkable", hint: "Worthy of attention" },
+                { word: "spectacular", hint: "Beautiful in a dramatic way" },
+                { word: "terrific", hint: "Extremely good or excellent" },
+                { word: "undoubted", hint: "Not questioned or doubted" },
+                { word: "victorious", hint: "Having won a victory" },
+                { word: "wonderful", hint: "Extremely good or remarkable" },
+                { word: "xenophile", hint: "Person attracted to foreign things" },
+                { word: "youthful", hint: "Remaining young and energetic" },
+                { word: "zealous", hint: "Having or showing zeal" },
+                { word: "alligator", hint: "Large reptile similar to crocodile" },
+                { word: "butterfly", hint: "Nectar-feeding insect with wings" },
+                { word: "caterpillar", hint: "Larva of butterfly or moth" },
+                { word: "dragonfly", hint: "Long-bodied insect with wings" },
+                { word: "elephant", hint: "Large mammal with trunk and tusks" },
+                { word: "flamingo", hint: "Wading bird with pink feathers" },
+                { word: "giraffe", hint: "Tall African animal with long neck" },
+                { word: "hummingbird", hint: "Small nectar-feeding bird" },
+                { word: "iguana", hint: "Large tropical American lizard" },
+                { word: "jaguar", hint: "Large spotted cat of Central America" },
+                { word: "kangaroo", hint: "Australian marsupial with strong hind legs" },
+                { word: "leopard", hint: "Large spotted cat of Africa and Asia" },
+                { word: "mongoose", hint: "Small carnivorous mammal" },
+                { word: "narwhal", hint: "Small Arctic whale with long tusk" },
+                { word: "octopus", hint: "Eight-armed sea creature" },
+                { word: "peacock", hint: "Male bird with brilliant plumage" },
+                { word: "rhinoceros", hint: "Large thick-skinned mammal with horn" },
+                { word: "scorpion", hint: "Arachnid with pincers and sting" },
+                { word: "tarantula", hint: "Large hairy spider" },
+                { word: "vulture", hint: "Large bird of prey feeding on carrion" },
+                { word: "wallaby", hint: "Small or medium-sized kangaroo" },
+                { word: "xenopus", hint: "African clawed frog" },
+                { word: "yak", hint: "Long-haired ox of central Asia" },
+                { word: "zebra", hint: "African wild horse with stripes" },
+                { word: "accordion", hint: "Musical instrument with bellows" },
+                { word: "bagpipes", hint: "Scottish wind instrument" },
+                { word: "clarinet", hint: "Woodwind instrument with single reed" },
+                { word: "drum", hint: "Percussion instrument with skin stretched" },
+                { word: "euphonium", hint: "Brass instrument of tenor pitch" },
+                { word: "flute", hint: "Wind instrument made from tube" },
+                { word: "guitar", hint: "Stringed musical instrument" },
+                { word: "harmonica", hint: "Small rectangular wind instrument" },
+                { word: "instrument", hint: "Device for producing musical sounds" },
+                { word: "jazz", hint: "Music originated in African-American" },
+                { word: "koto", hint: "Japanese zither with strings" },
+                { word: "lyre", hint: "Ancient Greek stringed instrument" },
+                { word: "marimba", hint: "Xylophone-like instrument" },
+                { word: "note", hint: "Single tone of definite pitch" },
+                { word: "oboe", hint: "Woodwind instrument with double reed" },
+                { word: "piano", hint: "Keyboard musical instrument" },
+                { word: "quartet", hint: "Group of four musicians" },
+                { word: "recorder", hint: "Woodwind instrument with whistle mouth" },
+                { word: "saxophone", hint: "Woodwind instrument with single reed" },
+                { word: "trumpet", hint: "Brass instrument with flared bell" },
+                { word: "ukulele", hint: "Small four-stringed guitar" },
+                { word: "violin", hint: "Stringed instrument played with bow" },
+                { word: "whistle", hint: "Device producing shrill sound" },
+                { word: "xylophone", hint: "Musical instrument with wooden bars" },
+                { word: "yodel", hint: "Form of singing with rapid pitch changes" },
+                { word: "zither", hint: "Stringed instrument with flat soundbox" }
             ],
             expert: [
                 { word: "extravaganza", hint: "Elaborate and spectacular entertainment" },
@@ -757,8 +1171,228 @@
                 { word: "kaleidoscope", hint: "Optical instrument with mirrors" },
                 { word: "labyrinthine", hint: "Complicated and confusing" },
                 { word: "magnificent", hint: "Extremely beautiful and impressive" },
-                { word: "nevertheless", hint: "In spite of that; notwithstanding" }
+                { word: "nevertheless", hint: "In spite of that; notwithstanding" },
+                { word: "ostentatious", hint: "Designed to impress or attract notice" },
+                { word: "perseverance", hint: "Persistence in doing something" },
+                { word: "quintuplets", hint: "Five children born at one birth" },
+                { word: "rejuvenation", hint: "Action of making someone young again" },
+                { word: "serendipity", hint: "Occurrence of events by chance" },
+                { word: "therapeutic", hint: "Relating to the healing of disease" },
+                { word: "unambiguous", hint: "Not open to more than one interpretation" },
+                { word: "ventriloquist", hint: "Entertainer who makes voice appear" },
+                { word: "whimsicality", hint: "Playfully quaint or fanciful behavior" },
+                { word: "xenotransplant", hint: "Transplant between different species" },
+                { word: "yesteryear", hint: "Last year or the recent past" },
+                { word: "zoogeography", hint: "Study of geographical distribution" },
+                { word: "ambidextrous", hint: "Able to use both hands equally well" },
+                { word: "bibliophile", hint: "Person who collects or loves books" },
+                { word: "circumnavigate", hint: "Sail all the way around something" },
+                { word: "discombobulate", hint: "Confuse or disconcert someone" },
+                { word: "eccentricity", hint: "Quality of being unconventional" },
+                { word: "flabbergasted", hint: "Greatly surprised or astonished" },
+                { word: "grandiloquent", hint: "Pompous or extravagant in language" },
+                { word: "hypochondriac", hint: "Person abnormally anxious about health" },
+                { word: "incomprehensible", hint: "Not able to be understood" },
+                { word: "juxtaposition", hint: "Placement of things close together" },
+                { word: "kaleidoscopic", hint: "Having complex patterns of colors" },
+                { word: "lackadaisical", hint: "Lacking enthusiasm and determination" },
+                { word: "mellifluous", hint: "Pleasantly smooth and musical" },
+                { word: "nefarious", hint: "Wicked or criminal" },
+                { word: "onomatopoeia", hint: "Formation of word from sound" },
+                { word: "parsimonious", hint: "Unwilling to spend money" },
+                { word: "quizzical", hint: "Indicating mild or amused puzzlement" },
+                { word: "recalcitrant", hint: "Stubbornly refusing to obey" },
+                { word: "sesquipedalian", hint: "Given to using long words" },
+                { word: "transcendental", hint: "Relating to spiritual or nonphysical" },
+                { word: "ubiquitous", hint: "Present, appearing everywhere" },
+                { word: "vexillology", hint: "Study of flags" },
+                { word: "wunderkind", hint: "Person who achieves great success" },
+                { word: "xenogenesis", hint: "Production of offspring unlike parents" },
+                { word: "yesterevening", hint: "The evening of yesterday" },
+                { word: "zeitgeist", hint: "Defining spirit or mood of a period" },
+                { word: "anachronistic", hint: "Belonging to a different period" },
+                { word: "belligerent", hint: "Hostile and aggressive" },
+                { word: "cacophony", hint: "Harsh discordant mixture of sounds" },
+                { word: "demagogue", hint: "Political leader who seeks support" },
+                { word: "ephemeral", hint: "Lasting for a very short time" },
+                { word: "facetious", hint: "Treating serious issues with humor" },
+                { word: "gregarious", hint: "Fond of company; sociable" },
+                { word: "hieroglyphic", hint: "Writing system using pictures" },
+                { word: "idiosyncratic", hint: "Peculiar or individual" },
+                { word: "jejune", hint: "Naive, simplistic, and superficial" },
+                { word: "kafkaesque", hint: "Characteristic of nightmarish complexity" },
+                { word: "lugubrious", hint: "Looking or sounding sad" },
+                { word: "metamorphosis", hint: "Change of form or nature" },
+                { word: "nomenclature", hint: "Devising or choosing names" },
+                { word: "obfuscate", hint: "Render obscure or unclear" },
+                { word: "pandemonium", hint: "Wild and noisy disorder" },
+                { word: "quagmire", hint: "Soft boggy area of land" },
+                { word: "recapitulate", hint: "Summarize and state again" },
+                { word: "sycophant", hint: "Person who acts obsequiously" },
+                { word: "tintinnabulation", hint: "Ringing or tinkling sound" },
+                { word: "ubiquity", hint: "Presence everywhere or in many places" },
+                { word: "verisimilitude", hint: "Appearance of being true or real" },
+                { word: "welterweight", hint: "Weight in boxing and wrestling" },
+                { word: "xenodochium", hint: "House for receiving strangers" },
+                { word: "yarborough", hint: "Hand in bridge with no card above nine" },
+                { word: "zymurgy", hint: "Study of fermentation processes" },
+                { word: "antediluvian", hint: "Of or belonging to time before flood" },
+                { word: "beleaguer", hint: "Beset with difficulties" },
+                { word: "cognoscenti", hint: "People with special knowledge" },
+                { word: "dipsomaniac", hint: "Person with irresistible craving" },
+                { word: "euphemism", hint: "Mild or indirect word substituted" },
+                { word: "foudroyant", hint: "Dazzling or stunning in effect" },
+                { word: "gobbledygook", hint: "Language that is meaningless" },
+                { word: "hocus-pocus", hint: "Language used to conceal the truth" },
+                { word: "iconoclast", hint: "Person who attacks cherished beliefs" },
+                { word: "jeremiad", hint: "Lengthy lamentation or complaint" },
+                { word: "knickerbocker", hint: "New Yorker descended from Dutch" },
+                { word: "logorrhea", hint: "Excessive and incoherent talkativeness" },
+                { word: "malfeasance", hint: "Wrongdoing by public official" },
+                { word: "narcissistic", hint: "Excessive interest in oneself" },
+                { word: "obstreperous", hint: "Noisy and difficult to control" },
+                { word: "palaver", hint: "Prolonged and tedious fuss" },
+                { word: "quodlibet", hint: "Light-hearted medley of tunes" },
+                { word: "ratiocination", hint: "Process of exact thinking" },
+                { word: "somnambulist", hint: "Sleepwalker" },
+                { word: "tatterdemalion", hint: "Person in tattered clothing" },
+                { word: "ultracrepidarian", hint: "Expressing opinions beyond knowledge" },
+                { word: "valetudinarian", hint: "Person unduly anxious about health" },
+                { word: "widdershins", hint: "In direction contrary to sun's course" },
+                { word: "xenoglossy", hint: "Knowledge of language never learned" },
+                { word: "yarborough", hint: "Hand in bridge with no card above nine" },
+                { word: "zymurgy", hint: "Study of fermentation processes" }
             ]
+        };
+
+        // Language Translations
+        const translations = {
+            en: {
+                logoText: "Word Puzzle Game",
+                helpBtnText: "Help",
+                leaderboardBtnText: "Leaderboard",
+                gameInfoBtnText: "Game Info",
+                settingsBtnText: "Settings",
+                introTitle: "Word Puzzle Game",
+                introDescription: "Unscramble letters to form meaningful words! Test your vocabulary skills and climb the leaderboard as you progress through increasingly challenging levels. Earn badges and compete with friends!",
+                startBtnText: "Start Game",
+                pointsText: "Points",
+                streakLabel: "Streak:",
+                hintLabel: "Hint:",
+                answerInputPlaceholder: "Type your answer here...",
+                submitBtnText: "Submit",
+                hintBtnText: "Hint (7 left)",
+                skipBtnText: "Skip",
+                shuffleBtnText: "Shuffle",
+                helpTitle: "How to Play",
+                objectiveText: "Objective:",
+                objectiveDesc: "Unscramble the letters to form a valid word.",
+                gameplayText: "Gameplay:",
+                gameplay1: "Type your answer in the input field and click Submit",
+                gameplay2: "Use the Shuffle button to rearrange the letters",
+                gameplay3: "Get hints when you're stuck (limited uses)",
+                gameplay4: "Skip a word if it's too challenging",
+                scoringText: "Scoring:",
+                scoring1: "+10 points for correct answer",
+                scoring2: "+5 bonus points for quick answers",
+                scoring3: "Multiplier for consecutive correct answers",
+                progressText: "Progress through levels (Easy, Medium, Hard, Expert) as you earn more points!",
+                gameInfoTitle: "Game Information",
+                creatorText: "Creator:",
+                versionText: "Version:",
+                releaseText: "Release Date:",
+                descriptionText: "Description:",
+                leaderboardTitle: "Leaderboard",
+                backToGameText: "Back to Game",
+                rankHeader: "Rank",
+                playerHeader: "Player",
+                scoreHeader: "Score",
+                levelHeader: "Level",
+                timeHeader: "Time Played",
+                settingsTitle: "Game Settings",
+                languageLabel: "Language",
+                difficultyLabel: "Difficulty Level",
+                playerNameLabel: "Player Name",
+                timerLabel: "Timer",
+                cancelText: "Cancel",
+                saveText: "Save",
+                levelNames: {
+                    easy: "Easy",
+                    medium: "Medium",
+                    hard: "Hard",
+                    expert: "Expert"
+                },
+                feedback: {
+                    correct: "Correct! +{points} points (Word: {word})",
+                    incorrect: "Incorrect! Try again.",
+                    timeUp: "Time's up! The word was: {word}",
+                    noHints: "No hints left!",
+                    enterAnswer: "Please enter an answer!"
+                }
+            },
+            km: {
+                logoText: "ល្បែងពាក្យអក្សរច្របល់",
+                helpBtnText: "ជំនួយ",
+                leaderboardBtnText: "តារាងឈ្នះ",
+                gameInfoBtnText: "ព័ត៌មានហ្គេម",
+                settingsBtnText: "ការកំណត់",
+                introTitle: "ល្បែងពាក្យអក្សរច្របល់",
+                introDescription: "រៀបអក្សរឡើងវិញដើម្បីបង្កើតជាពាក្យដែលមានន័យ! សាកល្បងជំនាញវាក្យសព្ទរបស់អ្នក និងឡើងកំរិតនៅពេលអ្នកឆ្លងកាត់កំរិតដែលកាន់តែពិបាក។ រក្សាទុកផ្លាកសញ្ញា និងប្រកួតប្រជែងជាមួយមិត្តភក្តិ!",
+                startBtnText: "ចាប់ផ្តើមល្បែង",
+                pointsText: "ពិន្ទុ",
+                streakLabel: "ដំណើរការ:",
+                hintLabel: "ពាក្យបំភ្លឺ:",
+                answerInputPlaceholder: "វាយចម្លើយរបស់អ្នកនៅទីនេះ...",
+                submitBtnText: "ដាក់ស្នើ",
+                hintBtnText: "ពាក្យបំភ្លឺ (នៅសល់ ៧)",
+                skipBtnText: "រំលង",
+                shuffleBtnText: "ច្របល់",
+                helpTitle: "របៀបលេង",
+                objectiveText: "គោលបំណង៖",
+                objectiveDesc: "រៀបអក្សរឡើងវិញដើម្បីបង្កើតជាពាក្យដែលមានន័យ។",
+                gameplayText: "របៀបលេង៖",
+                gameplay1: "វាយចម្លើយរបស់អ្នកក្នុងប្រអប់ ហើយចុចដាក់ស្នើ",
+                gameplay2: "ប្រើប៊ូតុងច្របល់ដើម្បីរៀបអក្សរឡើងវិញ",
+                gameplay3: "ទាញយកពាក្យបំភ្លឺនៅពេលអ្នកជាប់ (កំណត់ចំនួន)",
+                gameplay4: "រំលងពាក្យបើពិបាកពេក",
+                scoringText: "ពិន្ទុ៖",
+                scoring1: "+១០ពិន្ទុសម្រាប់ចម្លើយត្រឹមត្រូវ",
+                scoring2: "+៥ពិន្ទុបន្ថែមសម្រាប់ចម្លើយលឿន",
+                scoring3: "គុណនឹងចម្លើ�ត្រឹមត្រូវជាប់ៗគ្នា",
+                progressText: "ឡើងកំរិត (ងាយ,មធ្យម,ពិបាក,ជំនាញ) នៅពេលអ្នករកពិន្ទុបានច្រើន!",
+                gameInfoTitle: "ព័ត៌មានហ្គេម",
+                creatorText: "អ្នកបង្កើត៖",
+                versionText: "កំណែ៖",
+                releaseText: "កាលបរិច្ឆេទចេញផ្សាយ៖",
+                descriptionText: "ការពិពណ៌នា៖",
+                leaderboardTitle: "តារាងឈ្នះ",
+                backToGameText: "ត្រឡប់ទៅហ្គេម",
+                rankHeader: "ចំណាត់ថ្នាក់",
+                playerHeader: "អ្នកលេង",
+                scoreHeader: "ពិន្ទុ",
+                levelHeader: "កំរិត",
+                timeHeader: "ពេលវេលាលេង",
+                settingsTitle: "ការកំណត់ហ្គេម",
+                languageLabel: "ភាសា",
+                difficultyLabel: "កំរិតកម្រ",
+                playerNameLabel: "ឈ្មោះអ្នកលេង",
+                timerLabel: "ម៉ោងរាប់ថយក្រោយ",
+                cancelText: "បោះបង់",
+                saveText: "រក្សាទុក",
+                levelNames: {
+                    easy: "ងាយ",
+                    medium: "មធ្យម",
+                    hard: "ពិបាក",
+                    expert: "ជំនាញ"
+                },
+                feedback: {
+                    correct: "ត្រឹមត្រូវ! +{points}ពិន្ទុ (ពាក្យ៖ {word})",
+                    incorrect: "មិនត្រឹមត្រូវ! ព្យាយាមម្តងទៀត។",
+                    timeUp: "អស់ពេលហើយ! ពាក្យនោះគឺ៖ {word}",
+                    noHints: "អស់ពាក្យបំភ្លឺហើយ!",
+                    enterAnswer: "សូមបញ្ចូលចម្លើយ!"
+                }
+            }
         };
 
         // Game State
@@ -773,6 +1407,7 @@
             currentDifficulty: 'easy',
             gameStarted: false,
             playerName: 'Player',
+            language: 'en',
             leaderboard: JSON.parse(localStorage.getItem('wordPuzzleLeaderboard')) || []
         };
 
@@ -789,8 +1424,10 @@
             timerDisplay: document.getElementById('timerDisplay'),
             streakDisplay: document.getElementById('streakDisplay'),
             levelBadge: document.getElementById('levelBadge'),
+            levelBadgeText: document.getElementById('levelBadgeText'),
             feedback: document.getElementById('feedback'),
             helpSection: document.getElementById('helpSection'),
+            gameInfoSection: document.getElementById('gameInfoSection'),
             startBtn: document.getElementById('startBtn'),
             submitBtn: document.getElementById('submitBtn'),
             hintBtn: document.getElementById('hintBtn'),
@@ -798,6 +1435,7 @@
             shuffleBtn: document.getElementById('shuffleBtn'),
             helpBtn: document.getElementById('helpBtn'),
             leaderboardBtn: document.getElementById('leaderboardBtn'),
+            gameInfoBtn: document.getElementById('gameInfoBtn'),
             backToGameBtn: document.getElementById('backToGameBtn'),
             settingsBtn: document.getElementById('settingsBtn'),
             settingsModal: document.getElementById('settingsModal'),
@@ -806,7 +1444,56 @@
             saveSettingsBtn: document.getElementById('saveSettingsBtn'),
             difficultySelect: document.getElementById('difficultySelect'),
             playerNameInput: document.getElementById('playerNameInput'),
-            timerSelect: document.getElementById('timerSelect')
+            timerSelect: document.getElementById('timerSelect'),
+            languageSelect: document.getElementById('languageSelect'),
+            // Text elements for translation
+            logoText: document.getElementById('logoText'),
+            helpBtnText: document.getElementById('helpBtnText'),
+            leaderboardBtnText: document.getElementById('leaderboardBtnText'),
+            gameInfoBtnText: document.getElementById('gameInfoBtnText'),
+            settingsBtnText: document.getElementById('settingsBtnText'),
+            introTitle: document.getElementById('introTitle'),
+            introDescription: document.getElementById('introDescription'),
+            startBtnText: document.getElementById('startBtnText'),
+            pointsText: document.getElementById('pointsText'),
+            streakLabel: document.getElementById('streakLabel'),
+            hintLabel: document.getElementById('hintLabel'),
+            submitBtnText: document.getElementById('submitBtnText'),
+            hintBtnText: document.getElementById('hintBtnText'),
+            skipBtnText: document.getElementById('skipBtnText'),
+            shuffleBtnText: document.getElementById('shuffleBtnText'),
+            helpTitle: document.getElementById('helpTitle'),
+            objectiveText: document.getElementById('objectiveText'),
+            objectiveDesc: document.getElementById('objectiveDesc'),
+            gameplayText: document.getElementById('gameplayText'),
+            gameplay1: document.getElementById('gameplay1'),
+            gameplay2: document.getElementById('gameplay2'),
+            gameplay3: document.getElementById('gameplay3'),
+            gameplay4: document.getElementById('gameplay4'),
+            scoringText: document.getElementById('scoringText'),
+            scoring1: document.getElementById('scoring1'),
+            scoring2: document.getElementById('scoring2'),
+            scoring3: document.getElementById('scoring3'),
+            progressText: document.getElementById('progressText'),
+            gameInfoTitle: document.getElementById('gameInfoTitle'),
+            creatorText: document.getElementById('creatorText'),
+            versionText: document.getElementById('versionText'),
+            releaseText: document.getElementById('releaseText'),
+            descriptionText: document.getElementById('descriptionText'),
+            leaderboardTitle: document.getElementById('leaderboardTitle'),
+            backToGameText: document.getElementById('backToGameText'),
+            rankHeader: document.getElementById('rankHeader'),
+            playerHeader: document.getElementById('playerHeader'),
+            scoreHeader: document.getElementById('scoreHeader'),
+            levelHeader: document.getElementById('levelHeader'),
+            timeHeader: document.getElementById('timeHeader'),
+            settingsTitle: document.getElementById('settingsTitle'),
+            languageLabel: document.getElementById('languageLabel'),
+            difficultyLabel: document.getElementById('difficultyLabel'),
+            playerNameLabel: document.getElementById('playerNameLabel'),
+            timerLabel: document.getElementById('timerLabel'),
+            cancelText: document.getElementById('cancelText'),
+            saveText: document.getElementById('saveText')
         };
 
         // Event Listeners
@@ -816,6 +1503,7 @@
         elements.skipBtn.addEventListener('click', nextWord);
         elements.shuffleBtn.addEventListener('click', shuffleLetters);
         elements.helpBtn.addEventListener('click', toggleHelp);
+        elements.gameInfoBtn.addEventListener('click', toggleGameInfo);
         elements.leaderboardBtn.addEventListener('click', showLeaderboard);
         elements.backToGameBtn.addEventListener('click', backToGame);
         elements.settingsBtn.addEventListener('click', openSettings);
@@ -828,10 +1516,25 @@
 
         // Initialize
         function init() {
-            updateLeaderboard();
+            // Load saved settings
+            const savedSettings = JSON.parse(localStorage.getItem('wordPuzzleSettings'));
+            if (savedSettings) {
+                gameState.language = savedSettings.language || 'en';
+                gameState.playerName = savedSettings.playerName || 'Player';
+                gameState.timer = savedSettings.timer || 60;
+                gameState.currentDifficulty = savedSettings.difficulty || 'easy';
+            }
+
+            // Set UI elements based on saved settings
+            elements.languageSelect.value = gameState.language;
             elements.playerNameInput.value = gameState.playerName;
             elements.timerSelect.value = gameState.timer;
             elements.difficultySelect.value = gameState.currentDifficulty;
+
+            // Apply language
+            applyLanguage(gameState.language);
+
+            updateLeaderboard();
         }
 
         // Game Functions
@@ -858,29 +1561,16 @@
         }
 
         function nextWord() {
-            // Update difficulty based on score
-            if (gameState.score >= 300) {
-                gameState.currentDifficulty = 'expert';
-                elements.levelBadge.className = 'level-badge expert';
-                elements.levelBadge.textContent = 'Expert';
-            } else if (gameState.score >= 150) {
-                gameState.currentDifficulty = 'hard';
-                elements.levelBadge.className = 'level-badge hard';
-                elements.levelBadge.textContent = 'Hard';
-            } else if (gameState.score >= 50) {
-                gameState.currentDifficulty = 'medium';
-                elements.levelBadge.className = 'level-badge medium';
-                elements.levelBadge.textContent = 'Medium';
-            } else {
-                gameState.currentDifficulty = 'easy';
-                elements.levelBadge.className = 'level-badge easy';
-                elements.levelBadge.textContent = 'Easy';
-            }
-
+            // Set the current difficulty based on selection (not score)
+            gameState.currentDifficulty = elements.difficultySelect.value;
+            
+            // Update level badge
+            updateLevelBadge();
+            
             gameState.currentWord = getRandomWord(gameState.currentDifficulty);
             const scrambled = scrambleWord(gameState.currentWord.word);
             elements.scrambledWord.textContent = scrambled;
-            elements.hintText.textContent = `Hint: ${gameState.currentWord.hint}`;
+            elements.hintText.textContent = `${translations[gameState.language].hintLabel} ${gameState.currentWord.hint}`;
             elements.hintText.style.display = 'none';
             elements.answerInput.value = '';
             elements.answerInput.focus();
@@ -890,11 +1580,17 @@
             resetTimer();
         }
 
+        function updateLevelBadge() {
+            const difficulty = elements.difficultySelect.value;
+            elements.levelBadge.className = 'level-badge ' + difficulty;
+            elements.levelBadgeText.textContent = translations[gameState.language].levelNames[difficulty];
+        }
+
         function checkAnswer() {
             const userAnswer = elements.answerInput.value.trim().toLowerCase();
             
             if (!userAnswer) {
-                showFeedback('Please enter an answer!', false);
+                showFeedback(translations[gameState.language].feedback.enterAnswer, false);
                 return;
             }
 
@@ -908,7 +1604,12 @@
                 gameState.streak++;
                 
                 updateScoreDisplay();
-                showFeedback(`Correct! +${pointsEarned} points (Word: ${gameState.currentWord.word})`, true);
+                
+                const feedbackText = translations[gameState.language].feedback.correct
+                    .replace('{points}', pointsEarned)
+                    .replace('{word}', gameState.currentWord.word);
+                
+                showFeedback(feedbackText, true);
                 
                 setTimeout(() => {
                     nextWord();
@@ -917,18 +1618,18 @@
                 // Incorrect answer
                 gameState.streak = 0;
                 updateScoreDisplay();
-                showFeedback(`Incorrect! Try again.`, false);
+                showFeedback(translations[gameState.language].feedback.incorrect, false);
             }
         }
 
         function showHint() {
             if (gameState.hintsLeft <= 0) {
-                showFeedback('No hints left!', false);
+                showFeedback(translations[gameState.language].feedback.noHints, false);
                 return;
             }
             
             gameState.hintsLeft--;
-            elements.hintBtn.textContent = `Hint (${gameState.hintsLeft} left)`;
+            elements.hintBtnText.textContent = translations[gameState.language].hintBtnText.replace('7', gameState.hintsLeft);
             elements.hintText.style.display = 'block';
             
             // Disable hint button if no hints left
@@ -964,7 +1665,9 @@
                 
                 if (gameState.timeLeft <= 0) {
                     clearInterval(gameState.timerInterval);
-                    showFeedback('Time\'s up! The word was: ' + gameState.currentWord.word, false);
+                    const feedbackText = translations[gameState.language].feedback.timeUp
+                        .replace('{word}', gameState.currentWord.word);
+                    showFeedback(feedbackText, false);
                     gameState.streak = 0;
                     updateScoreDisplay();
                     
@@ -1000,6 +1703,12 @@
         // UI Functions
         function toggleHelp() {
             elements.helpSection.classList.toggle('active');
+            elements.gameInfoSection.classList.remove('active');
+        }
+
+        function toggleGameInfo() {
+            elements.gameInfoSection.classList.toggle('active');
+            elements.helpSection.classList.remove('active');
         }
 
         function showLeaderboard() {
@@ -1055,17 +1764,17 @@
                 
                 // Determine badge based on level
                 let badgeClass = 'level-badge easy';
-                let levelText = 'Easy';
+                let levelText = translations[gameState.language].levelNames.easy;
                 
                 if (player.level === 'medium') {
                     badgeClass = 'level-badge medium';
-                    levelText = 'Medium';
+                    levelText = translations[gameState.language].levelNames.medium;
                 } else if (player.level === 'hard') {
                     badgeClass = 'level-badge hard';
-                    levelText = 'Hard';
+                    levelText = translations[gameState.language].levelNames.hard;
                 } else if (player.level === 'expert') {
                     badgeClass = 'level-badge expert';
-                    levelText = 'Expert';
+                    levelText = translations[gameState.language].levelNames.expert;
                 }
                 
                 row.innerHTML = `
@@ -1095,9 +1804,29 @@
         }
 
         function saveSettings() {
+            const newLanguage = elements.languageSelect.value;
+            const languageChanged = newLanguage !== gameState.language;
+            
+            gameState.language = newLanguage;
             gameState.playerName = elements.playerNameInput.value || 'Player';
             gameState.timer = parseInt(elements.timerSelect.value);
             gameState.currentDifficulty = elements.difficultySelect.value;
+            
+            // Save settings to localStorage
+            localStorage.setItem('wordPuzzleSettings', JSON.stringify({
+                language: gameState.language,
+                playerName: gameState.playerName,
+                timer: gameState.timer,
+                difficulty: gameState.currentDifficulty
+            }));
+            
+            // Apply language if changed
+            if (languageChanged) {
+                applyLanguage(gameState.language);
+            }
+            
+            // Update level badge
+            updateLevelBadge();
             
             // Reset timer if game is in progress
             if (gameState.gameStarted) {
@@ -1105,6 +1834,36 @@
             }
             
             closeSettings();
+        }
+
+        // Language Functions
+        function applyLanguage(language) {
+            // Apply to all elements with translations
+            for (const [key, value] of Object.entries(translations[language])) {
+                if (key === 'levelNames' || key === 'feedback') continue;
+                
+                const element = elements[key];
+                if (element) {
+                    if (element.tagName === 'INPUT' && element.placeholder) {
+                        element.placeholder = value;
+                    } else {
+                        element.textContent = value;
+                    }
+                }
+            }
+            
+            // Update hint button text
+            elements.hintBtnText.textContent = translations[language].hintBtnText.replace('7', gameState.hintsLeft);
+            
+            // Update level badge text
+            updateLevelBadge();
+            
+            // Update body class for Khmer font
+            if (language === 'km') {
+                document.body.classList.add('khmer-font');
+            } else {
+                document.body.classList.remove('khmer-font');
+            }
         }
 
         // Initialize the game
